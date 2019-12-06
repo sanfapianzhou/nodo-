@@ -1,10 +1,10 @@
-var http = require('http');
+var https = require('https');
 var fs = require('fs');
 var cheerio = require('cheerio');
 var request = require('request');
 var i = 0;
 //初始url
-var url = "http://cs.whu.edu.cn/a/xinwendongtaifabu/2018/0428/7053.html";
+var url = "https://cs.whu.edu.cn/a/xinwendongtaifabu/2018/0428/7053.html";
 
 function fetchPage(x) {     //封装了一层函数
   startRequest(x);
