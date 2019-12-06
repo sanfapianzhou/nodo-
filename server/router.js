@@ -11,12 +11,12 @@ var homeDesc = {},
     i=1;
     //ahtml;
 router.get("/homeData",function(req,res){
-  function fetchPage(x) {     //封装了一层函数
-    startRequest(x);
-  }
-  function startRequest(x) {
+  // function fetchPage(x) {     //封装了一层函数
+  //   startRequest(x);
+  // }
+  // function startRequest(x) {
 
-    http.get(x,function(response){
+    http.get(url,function(response){
     var  ahtml ='';
         response.on("data",function(chunk){
           ahtml += iconv.decode(chunk,'GBK')//转码
@@ -51,8 +51,8 @@ router.get("/homeData",function(req,res){
   }).on("error",function(err){
     console.log(err)
   });
-  }
-  fetchPage(url);
+  // }
+  // fetchPage(url);
 
 
 function ygwy (x){
@@ -62,14 +62,22 @@ function ygwy (x){
 			_html += iconv.decode(chunk,'GBK')//转码
 		});
 		response.on("end",function(){
-			$ = cheerio.load(_html);
+      $ = cheerio.load(_html);
+      var wynews = $("#NewsContentShow").text(),
+          wynews_title =$("#NewsContentShow .title").text();
+       fs.mkdir('./wypq/'+wynews_title, { recursive: true },function(err){
+        if (err) {
+            return console.error(err);
+        }
+        console.log("目录创建成功。");
+     });
         $("#NewsContentShow img").each(function(k, v) {//自动给src添加域名
-        var src = v.attribs.src ;
+        var src = v.attribs.src;
          v.attribs.src = "http://news.xauat.edu.cn" + src;
-        saveImg($(v).attr('src'),'./tp/'+$("#NewsContentShow .title").text()+k+'.jpg');
+        saveImg($(v).attr('src'),'./wypq/'+wynews_title+'/'+k+'.jpg');
       });
-      var wynews = $("#NewsContentShow").text();
-      fs.writeFile('./wz/' + $("#NewsContentShow .title").text() + '.txt',wynews,(err)=>{
+
+      fs.writeFile('./wypq/'+wynews_title+'/' + 'nr.txt',wynews,(err)=>{
         if(err){
           console.log('wz保存失败'+ $("#NewsContentShow .title").text());
         } else {
